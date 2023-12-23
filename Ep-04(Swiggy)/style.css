@@ -44,3 +44,7 @@
 .res-card:hover {
   border: 2px solid rgb(184, 183, 183);
 }
+
+.filter {
+  margin-top: 50px;
+}
