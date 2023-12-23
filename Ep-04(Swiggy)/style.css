@@ -48,3 +48,16 @@
 .filter {
   margin-top: 50px;
 }
+
+.shimmer-container {
+  margin-top: 50px;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.shimmer {
+  margin: 10px;
+  width: 200px;
+  height: 300px;
+  background-color: #aba7a7;
+}
