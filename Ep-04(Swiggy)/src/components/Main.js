@@ -1,12 +1,16 @@
 import dataList from "../utils/data";
 import ResCard from "./ResCard";
 import { useState, useEffect } from "react";
-
+import apiData from "../utils/apidata";
+import ShimmerUi from "./ShimmerUi";
 const MainComponent = () => {
   //hooks
   //pass my dataList to useState
   // const [data, setData] = useState(dataList);
   const [data, setData] = useState([]);
+  const [filterData, setfilterData] = useState([]);
+
+  const [searchText, setSearchText] = useState("");
 
   //useEffect
   useEffect(() => {
@@ -14,43 +18,57 @@ const MainComponent = () => {
   }, []);
 
   const fetchData = async () => {
-    const res = await fetch("https://randomuser.me/api/");
-
-    // const data = await res.json();
+    const res = await fetch(
+      "https://instafood.onrender.com/api/restaurants?lat=12.9351929&lng=77.62448069999999"
+    );
+    // const jsonData = await res.json();
+    // console.log(jsonData);
     // update data state variable
-    console.log(dataList);
-    setData(dataList);
+    const data =
+      apiData?.data?.cards[3]?.card?.card?.gridElements?.infoWithStyle
+        ?.restaurants;
+    setData(data);
+    setfilterData(data);
   };
 
   //conditional rendering
-  if (data.length == 0) {
-    return (
-      <div className="shimmer-container">
-        <div className="shimmer"></div>
-        <div className="shimmer"></div>
-        <div className="shimmer"></div>
-        <div className="shimmer"></div>
-        <div className="shimmer"></div>
-        <div className="shimmer"></div>
-        <div className="shimmer"></div>
-        <div className="shimmer"></div>
-        <div className="shimmer"></div>
-        <div className="shimmer"></div>
-        <div className="shimmer"></div>
-        <div className="shimmer"></div>
-        <div className="shimmer"></div>
-        <div className="shimmer"></div>
-      </div>
-    );
+  if (filterData.length == 0) {
+    return <ShimmerUi />;
   }
-
   return (
     <div className="main">
+      <div className="search-container">
+        <input
+          type="text"
+          value={searchText}
+          onChange={(e) => {
+            // console.log(e.target.value);
+            setSearchText(e.target.value);
+          }}
+        ></input>
+        <button
+          onClick={() => {
+            if (searchText.length == 0) {
+              setfilterData(data);
+            } else {
+              const filterData = data.filter((res) => {
+                return res.info.name
+                  .toLowerCase()
+                  .includes(searchText.toLowerCase());
+              });
+
+              setfilterData(filterData);
+            }
+          }}
+        >
+          Search
+        </button>
+      </div>
       <div className="filter">
         <button
           onClick={() => {
             const filterData = data.filter((r) => r.info.avgRating >= 4);
-            setData(filterData);
+            setfilterData(filterData);
           }}
         >
           Only 5 Star resturant
@@ -60,7 +78,7 @@ const MainComponent = () => {
         {/* <ResCard /> */}
         {/* <ResCard data={rdata} /> */}
 
-        {data.map((r) => {
+        {filterData.map((r) => {
           return <ResCard data={r} key={r.info.id} />;
         })}
       </div>
