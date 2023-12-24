@@ -14,6 +14,7 @@ const MainComponent = () => {
 
   //useEffect
   useEffect(() => {
+    console.log("use effect called");
     fetchData();
   }, []);
 
@@ -37,7 +38,7 @@ const MainComponent = () => {
   }
   return (
     <div className="main">
-      <div className="search-container">
+      <div className="child-container">
         <input
           type="text"
           value={searchText}
@@ -63,17 +64,18 @@ const MainComponent = () => {
         >
           Search
         </button>
+        <div className="filter">
+          <button
+            onClick={() => {
+              const filterData = data.filter((r) => r.info.avgRating >= 4.5);
+              setfilterData(filterData);
+            }}
+          >
+            Only 4.5 Star above resturant
+          </button>
+        </div>
       </div>
-      <div className="filter">
-        <button
-          onClick={() => {
-            const filterData = data.filter((r) => r.info.avgRating >= 4);
-            setfilterData(filterData);
-          }}
-        >
-          Only 5 Star resturant
-        </button>
-      </div>
+
       <div className="res-container">
         {/* <ResCard /> */}
         {/* <ResCard data={rdata} /> */}

@@ -2,30 +2,28 @@
   display: flex;
   justify-content: space-between;
   border: 2px solid black;
+  align-items: center;
 }
 
 .logo-container {
-  width: 200px;
-  height: 100px;
+  /* border: 1px solid red; */
 }
 
 .nav-item {
+  padding: 0px 30px;
 }
 
 .nav-item ul {
   display: flex;
-  margin-top: 50px;
 }
 
 .nav-item li {
   padding: 10px 30px;
-  /* margin-top: 50px; */
   list-style: none;
-  /* border: 1px solid gray; */
+  font-size: 25px;
 }
 
 .search {
-  margin-top: 80px;
 }
 
 .res-container {
@@ -46,7 +44,7 @@
 }
 
 .filter {
-  margin-top: 50px;
+  margin-left: 50px;
 }
 
 .shimmer-container {
@@ -62,6 +60,11 @@
   background-color: #aba7a7;
 }
 
-.search-container {
+.child-container {
   margin-top: 10px;
+  display: flex;
+}
+
+.login-btn {
+  font-size: 25px;
 }
