@@ -1,21 +1,19 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 
-import NavCom from "./components/Nav";
-import SearchCom from "./components/Search";
 import Main from "./components/Main";
 import Test from "./components/Test";
 import About from "./components/About";
 import ContactUs from "./components/ContactUs";
 import Error from "./components/Error";
 import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
+import Header from "./components/Header";
 
 const AppCom = () => {
   return (
     <div className="main">
       {/* this nav components always present in every components */}
-      <NavCom />
-
+      <Header />
       {/* here we will render components according to the router using OutLet */}
       <Outlet />
     </div>

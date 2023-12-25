@@ -7,8 +7,7 @@ const Test = () => {
       <div>
         <button
           onClick={() => {
-            let c = count + 1;
-            setCount(c);
+            setCount(count + 1);
           }}
         >
           Click
