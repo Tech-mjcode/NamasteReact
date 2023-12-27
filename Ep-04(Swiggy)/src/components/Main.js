@@ -2,40 +2,57 @@ import { useState, useEffect } from "react";
 import apiData from "../utils/apidata";
 import Shimmer from "./Shimmer";
 import RestaurantCard from "./RestaurantCard";
+import { Link } from "react-router-dom";
 
 const MainComponent = () => {
-  //hooks
-  //pass my dataList to useState
-  // const [data, setData] = useState(dataList);
-  const [data, setData] = useState([]);
-  const [filterData, setfilterData] = useState([]);
-
   const [searchText, setSearchText] = useState("");
+  const [allRestaurants, setAllRestaurants] = useState([]);
+  const [filteredRestaurants, setFilteredRestaurants] = useState([]);
+  const [errorMessage, setErrorMessage] = useState("");
 
   //useEffect
   useEffect(() => {
-    console.log("use effect called");
+    // console.log("use effect called");
     fetchData();
   }, []);
 
   const fetchData = async () => {
-    const res = await fetch(
-      "https://instafood.onrender.com/api/restaurants?lat=12.9351929&lng=77.62448069999999"
-    );
-    // // const jsonData = await res.json();
-    // console.log(jsonData);
-    // update data state variable
-    // console.log(res);
-
+    const res = await fetch("https://randomuser.me/api/");
     const data =
       apiData?.data?.cards[5]?.card?.card?.gridElements?.infoWithStyle
         ?.restaurants;
-    setData(data);
-    setfilterData(data);
+    setAllRestaurants(data);
+    setFilteredRestaurants(data);
+  };
+
+  // Filter the restaurant data according input type
+  function filterData(searchText, restaurants) {
+    const resFilterData = restaurants.filter((restaurant) =>
+      restaurant?.info?.name.toLowerCase().includes(searchText.toLowerCase())
+    );
+    return resFilterData;
+  }
+  // use searchData function and set condition if data is empty show error message
+  const searchData = (searchText, restaurants) => {
+    if (searchText !== "") {
+      const filteredData = filterData(searchText, restaurants);
+      setFilteredRestaurants(filteredData);
+      setErrorMessage("");
+      console.log(filteredData);
+      if (filteredData.length == 0) {
+        setErrorMessage(
+          `Sorry, we couldn't find any results for "${searchText}"`
+        );
+        setFilteredRestaurants(restaurants);
+      }
+    } else {
+      setErrorMessage("");
+      setFilteredRestaurants(restaurants);
+    }
   };
 
   //conditional rendering
-  if (filterData.length == 0) {
+  if (filteredRestaurants.length == 0) {
     return <Shimmer />;
   }
   return (
@@ -59,13 +76,14 @@ const MainComponent = () => {
           Search
         </button>
       </div>
+      {errorMessage && <div className="error-container">{errorMessage}</div>}
       <div className="restaurant-list">
-        {/* <ResCard /> */}
-        {/* <ResCard data={rdata} /> */}
-
-        {filterData.map((r) => {
-          // return <ResCard data={r} key={r.info.id} />;
-          return <RestaurantCard rdata={r.info} key={r.info.id} />;
+        {filteredRestaurants.map((r) => {
+          return (
+            <Link key={r.info.id} to={"/restaurant/" + r.info.id}>
+              <RestaurantCard rdata={r.info} />
+            </Link>
+          );
         })}
       </div>
     </div>

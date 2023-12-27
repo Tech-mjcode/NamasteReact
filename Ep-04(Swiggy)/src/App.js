@@ -8,6 +8,8 @@ import ContactUs from "./components/ContactUs";
 import Error from "./components/Error";
 import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
 import Header from "./components/Header";
+import RestaurantMenu from "./components/RestaurantMenu";
+import ContactUsClass from "./components/class/ContactUsClass";
 
 const AppCom = () => {
   return (
@@ -52,7 +54,13 @@ const appRoute1 = createBrowserRouter([
       },
       {
         path: "/contact-us",
-        element: <ContactUs />,
+        // element: <ContactUs name={"Manash"} />,
+        element: <ContactUsClass name={"Manash Jyoti Handique"} />,
+      },
+
+      {
+        path: "/restaurant/:resId",
+        element: <RestaurantMenu sendata1="data1" sendata2="data2" />,
       },
     ],
   },
