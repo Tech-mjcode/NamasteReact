@@ -1,55 +1,13 @@
-import { useState, useEffect } from "react";
-import apiData from "../utils/apidata";
+import { useState } from "react";
 import Shimmer from "./Shimmer";
 import RestaurantCard from "./RestaurantCard";
 import { Link } from "react-router-dom";
-
+import useMain from "../utils/hooks/useMain";
 const MainComponent = () => {
   const [searchText, setSearchText] = useState("");
-  const [allRestaurants, setAllRestaurants] = useState([]);
-  const [filteredRestaurants, setFilteredRestaurants] = useState([]);
-  const [errorMessage, setErrorMessage] = useState("");
 
-  //useEffect
-  useEffect(() => {
-    // console.log("use effect called");
-    fetchData();
-  }, []);
-
-  const fetchData = async () => {
-    const res = await fetch("https://randomuser.me/api/");
-    const data =
-      apiData?.data?.cards[5]?.card?.card?.gridElements?.infoWithStyle
-        ?.restaurants;
-    setAllRestaurants(data);
-    setFilteredRestaurants(data);
-  };
-
-  // Filter the restaurant data according input type
-  function filterData(searchText, restaurants) {
-    const resFilterData = restaurants.filter((restaurant) =>
-      restaurant?.info?.name.toLowerCase().includes(searchText.toLowerCase())
-    );
-    return resFilterData;
-  }
-  // use searchData function and set condition if data is empty show error message
-  const searchData = (searchText, restaurants) => {
-    if (searchText !== "") {
-      const filteredData = filterData(searchText, restaurants);
-      setFilteredRestaurants(filteredData);
-      setErrorMessage("");
-      console.log(filteredData);
-      if (filteredData.length == 0) {
-        setErrorMessage(
-          `Sorry, we couldn't find any results for "${searchText}"`
-        );
-        setFilteredRestaurants(restaurants);
-      }
-    } else {
-      setErrorMessage("");
-      setFilteredRestaurants(restaurants);
-    }
-  };
+  const [filteredRestaurants, searchData, errorMessage, allRestaurants] =
+    useMain();
 
   //conditional rendering
   if (filteredRestaurants.length == 0) {

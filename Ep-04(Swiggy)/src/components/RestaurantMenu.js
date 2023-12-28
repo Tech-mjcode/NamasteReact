@@ -1,65 +1,14 @@
-import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom"; // import useParams for read `resId`
 import { MenuShimmer } from "./Shimmer";
-import all_menu from "../utils/menudata/all_menu";
-import {
-  IMG_CDN_URL,
-  ITEM_IMG_CDN_URL,
-  MENU_ITEM_TYPE_KEY,
-  RESTAURANT_TYPE_KEY,
-} from "../utils/commondata";
+
+import useRestaurantMenu from "../utils/hooks/useRestaurantMenu";
+import { IMG_CDN_URL, ITEM_IMG_CDN_URL } from "../utils/commondata";
+// import { lazy } from "react";
+
 const RestaurantMenu = (props) => {
   const { resId } = useParams(); // call useParams and get value of restaurant id using object destructuring
-  const [restaurant, setRestaurant] = useState(null); // call useState to store the api data in res
-  const [menuItems, setMenuItems] = useState([]);
-
-  useEffect(() => {
-    getRestaurantInfo(); // call getRestaurantInfo function so it fetch api data and set data in restaurant state variable
-  }, []);
-
-  const getRestaurantInfo = async () => {
-    try {
-      const res = await fetch("https://randomuser.me/api/");
-      //   const json = await res.json();
-
-      //data from my own file
-      let resData = all_menu.filter((i) => {
-        return i.data?.cards[0].card?.card?.info?.id === resId;
-      });
-
-      // Set restaurant data
-      const restaurantData =
-        resData[0]?.data?.cards
-          ?.map((x) => x.card)
-          ?.find((x) => x && x.card["@type"] === RESTAURANT_TYPE_KEY)?.card
-          ?.info || null;
-
-      setRestaurant(restaurantData);
-
-      //   Set menu item data
-      const menuItemsData =
-        resData[0]?.data?.cards
-          .find((x) => x.groupedCard)
-          ?.groupedCard?.cardGroupMap?.REGULAR?.cards?.map((x) => x.card?.card)
-          ?.filter((x) => x["@type"] == MENU_ITEM_TYPE_KEY)
-          ?.map((x) => x.itemCards)
-          .flat()
-          .map((x) => x.card?.info) || [];
-
-      const uniqueMenuItems = [];
-      menuItemsData.forEach((item) => {
-        if (!uniqueMenuItems.find((x) => x.id === item.id)) {
-          uniqueMenuItems.push(item);
-        }
-      });
-      setMenuItems(uniqueMenuItems);
-    } catch (error) {
-      setMenuItems([]);
-      setRestaurant(null);
-      console.log(error);
-    }
-  };
-
+  //make custom hooks useRestaurant it return and use array destructure
+  const [restaurant, menuItems] = useRestaurantMenu(resId);
   return !restaurant ? (
     <MenuShimmer />
   ) : (

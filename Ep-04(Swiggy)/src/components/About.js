@@ -1,4 +1,3 @@
-// import food from "../Images/burger-image.png";
 import imgurl from "../images/food.avif";
 const About = () => {
   return (

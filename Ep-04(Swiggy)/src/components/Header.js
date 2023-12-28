@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { LOGO_URL } from "../utils/urlList";
 import { Link } from "react-router-dom";
+import useInternet from "../utils/hooks/useInternet";
 
 const Title = () => (
   <a href="/">
@@ -18,6 +19,10 @@ const Header = () => {
   // use useState for user logged in or logged out
   const [isLoggedin, setIsLoggedin] = useState(true);
   // const navigate = useNavigate();
+  const onlineStatus = useInternet();
+  if (onlineStatus == false) {
+    alert("You are offline");
+  }
   return (
     <div className="header">
       <Title />
@@ -51,6 +56,7 @@ const Header = () => {
               </button>
             )}
           </li>
+          <li>{onlineStatus ? "🟢" : "🔴"}</li>
         </ul>
       </div>
     </div>

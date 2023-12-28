@@ -1,15 +1,21 @@
-import React from "react";
+import React, { Suspense, lazy } from "react";
 import ReactDOM from "react-dom/client";
 
 import Main from "./components/Main";
 import Test from "./components/Test";
-import About from "./components/About";
-import ContactUs from "./components/ContactUs";
+// import About from "./components/About";
+// import ContactUs from "./components/ContactUs";
 import Error from "./components/Error";
 import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
 import Header from "./components/Header";
 import RestaurantMenu from "./components/RestaurantMenu";
 import ContactUsClass from "./components/class/ContactUsClass";
+
+const About = lazy(() => {
+  return import("./components/About");
+});
+
+const ContactUs = lazy(() => import("./components/ContactUs"));
 
 const AppCom = () => {
   return (
@@ -50,12 +56,20 @@ const appRoute1 = createBrowserRouter([
       },
       {
         path: "/about",
-        element: <About />,
+        element: (
+          <Suspense fallback={<h1>loading..</h1>}>
+            <About />
+          </Suspense>
+        ),
       },
       {
         path: "/contact-us",
         // element: <ContactUs name={"Manash"} />,
-        element: <ContactUsClass name={"Manash Jyoti Handique"} />,
+        element: (
+          <Suspense fallback={<h1>Loading...</h1>}>
+            <ContactUs name={"Manash Jyoti Handique"} />
+          </Suspense>
+        ),
       },
 
       {
